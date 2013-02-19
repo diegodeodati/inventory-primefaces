@@ -1,0 +1,283 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<h:head>
+	<link rel="stylesheet" type="text/css" href="../../css/style.css"
+		media="screen" />
+	<meta http-equiv="refresh"
+		content="#{session.maxInactiveInterval};url=inventory.xhtml?faces-redirect=true" />
+</h:head>
+<h:body style="margin:0px;">
+	<div class="space"></div>
+	
+	#{reportBean.setManageInventory('border: 1px solid blue;')}
+#{reportBean.setManageInternalUse('')}
+#{reportBean.setManageMaps('')}
+#{reportBean.setManageUtility('')}
+	<h:form id="form-dialog-insert">
+		<p:dialog header="Inserisci Item" id="modalInsertItem" visible="false"
+			widgetVar="modalInsertItem" modal="true" closable="true"
+			draggable="false" resizable="false">
+			<p:panelGrid columns="2">
+				<h:outputText value="Descrizione:" />
+				<h:inputText id="descrizione" value="#{itemBean.description}" />
+				<h:outputText value="Marca:" />
+				<h:inputText id="brand" value="#{itemBean.brand}" />
+				<h:outputText value="Persona:" />
+				<p:selectOneMenu value="#{itemBean.owner}" filter="true"
+					filterMatchMode="contains" converter="personconverter">
+					<f:selectItem itemLabel="Seleziona" itemValue="" />
+					<f:selectItems value="#{tableBeanItem.avaliableOwner}" var="owner"
+						itemLabel="#{owner.name} #{owner.surname}" itemValue="#{owner}" />
+				</p:selectOneMenu>
+				<h:outputText value="Ufficio:" />
+				<p:selectOneMenu value="#{itemBean.office}" filter="true"
+					filterMatchMode="contains" converter="officeconverter">
+					<f:selectItem itemLabel="Seleziona" itemValue="" />
+					<f:selectItems value="#{tableBeanItem.avaliableOffice}"
+						var="office" itemLabel="#{office.name}" itemValue="#{office}" />
+				</p:selectOneMenu>
+				<h:outputText value="Tipologia:" />
+				<p:selectOneMenu value="#{itemBean.kind}" filter="true"
+					filterMatchMode="contains" converter="kindconverter">
+					<f:selectItem itemLabel="Seleziona" itemValue="" />
+					<f:selectItems value="#{tableBeanItem.avaliableKind}" var="kind"
+						itemLabel="#{kind.name}" itemValue="#{kind}" />
+					<f:ajax event="change" listener="#{tableBeanItem.onChangeKind}"
+						render="filter-barcode" />
+				</p:selectOneMenu>
+				<h:outputText value="Barcode:" />
+				<p:selectOneMenu value="#{itemBean.barcode}" filter="true"
+					filterMatchMode="contains" converter="barcode_itemconverter"
+					var="bdialog"
+					disabled="#{tableBeanItem.filteredBarcode_item.isEmpty()}"
+					id="filter-barcode">
+					<f:selectItem itemLabel="Seleziona" itemValue="" />
+					<f:selectItems value="#{tableBeanItem.filteredBarcode_item}"
+						var="barcodedialog" itemLabel="#{barcodedialog.barcode}"
+						itemValue="#{barcodedialog}" />
+					<p:column>
+						<p:graphicImage value="../../images/#{bdialog.used}.png"
+							styleClass="used-img" />
+					</p:column>
+
+					<p:column>#{bdialog.barcode} - #{bdialog.description}</p:column>
+				</p:selectOneMenu>
+				<f:facet name="footer">
+					<center>
+						<p:commandButton value="Salva"
+							actionListener="#{tableBeanItem.onCreate}" type="submit"
+							update=":form-table:itemReportTable"
+							oncomplete="modalInsertItem.hide();" />
+						<p:commandButton value="Annulla"
+							onclick="itemReportTable.filter();modalInsertItem.hide();"
+							type="button" update="modalInsertItem" />
+					</center>
+				</f:facet>
+			</p:panelGrid>
+		</p:dialog>
+	</h:form>
+	<h:form id="form-dialog">
+		<p:dialog id="modalDialog" visible="false" widgetVar="dialogModal"
+			modal="true" closable="false" draggable="false" resizable="false">
+			<p:ajaxStatus onstart="dialogModal.show()"
+				oncomplete="dialogModal.hide()" />
+			<p:graphicImage value="../../images/loading.gif" />
+		</p:dialog>
+
+		<p:dialog header="Componenti Pc" id="modalViewComponent"
+			visible="false" widgetVar="modalViewComponent" modal="true"
+			closable="true" draggable="false" resizable="false">
+			<p:dataTable var="comp"
+				value="#{tableBeanItem.itemGet.componentList}" scrollable="true"
+				scrollHeight="200">
+				<p:column headerText="Tipo" width="80">
+					<h:outputText value="#{comp.name}" />
+				</p:column>
+
+				<p:column headerText="Valore" width="200">
+					<h:outputText value="#{comp.details}" />
+				</p:column>
+			</p:dataTable>
+		</p:dialog>
+
+
+		<p:confirmDialog id="confirmDialog" message="Sei sicuro ?"
+			header="Cancellazione Oggetto" severity="alert"
+			widgetVar="confirmation">
+
+			<p:commandButton id="confirm" value="Si"
+				update=":form-table:itemReportTable"
+				oncomplete="itemReportTable.filter(),confirmation.hide()"
+				actionListener="#{tableBeanItem.onRemove}" />
+			<p:commandButton id="decline" value="No"
+				onclick="confirmation.hide()" type="button" />
+
+		</p:confirmDialog>
+
+
+	</h:form>
+	<ui:include src="../common/menu.xhtml" />
+	<p:layout fullPage="true">
+
+		<p:ajax event="resize" update=":form-table:itemReportTable" />
+		<p:layoutUnit position="north" styleClass="layoutUnit-north">
+
+
+
+		</p:layoutUnit>
+		<p:layoutUnit position="center" styleClass="layoutUnit-center">
+
+			<h:form id="form-table">
+				<p:growl id="messages" showDetail="true" life="2000" />
+
+				<p:remoteCommand id="load_component" name="load_component"
+					oncomplete="modalViewComponent.show()"
+					actionListener="#{tableBeanItem.populateComponent}"
+					update=":form-dialog:modalViewComponent" />
+
+				<p:dataTable var="item" value="#{tableBeanItem.tableList}"
+					widgetVar="itemReportTable" id="itemReportTable" editable="true"
+					additionalScrollHeight="300" resizableColumns="true"
+					scrollable="true" scrollHeight="0" scrollRows="20"
+					liveScroll="true" emptyMessage="Nessun Item con Questo Criterio">
+
+					<p:ajax event="rowEdit" update="@this,:form-table:messages"
+						listener="#{tableBeanItem.onEdit}" immediate="true" />
+
+					<p:ajax event="rowEditCancel" update="@this,:form-table:messages"
+						listener="#{tableBeanItem.onCancel}" immediate="true" />
+
+
+					<p:column headerText="Options" width="100">
+						<div class="div-tool-button">
+							<p:commandLink id="rowEditLink"
+								actionListener="#{tableBeanItem.onStartEdit}" ajax="true"
+								update="filter-barcode-table">
+								<f:attribute name="parameter" value="#{item}" />
+								<p:rowEditor />
+							</p:commandLink>
+							<p:commandButton id="submit_erase"
+								oncomplete="confirmation.show()"
+								actionListener="#{tableBeanItem.onSetItem}" icon="ui-icon-trash"
+								styleClass="custom-trash">
+								<f:attribute name="parameter" value="#{item}" />
+							</p:commandButton>
+						</div>
+					</p:column>
+
+					<p:column headerText="BARCODE" id="barcode" width="200"
+						sortBy="#{item.barcode.barcode}"
+						filterBy="#{item.barcode.barcode}"
+						filterOptions="#{reportBean.barcodeOptions}"
+						filterMatchMode="contains" styleClass="custom-barcode-filter">
+						<p:cellEditor>
+							<f:facet name="output">
+								<p:graphicImage
+									value="../../images/barcodes/#{item.barcode.barcode}.png"
+									styleClass="barcode-img" />
+								<h:outputText value="#{item.barcode.description}" />
+
+							</f:facet>
+							<f:facet name="input">
+								<p:selectOneMenu value="#{item.barcode}" filter="true" var="b"
+									filterMatchMode="contains" converter="barcode_itemconverter"
+									id="filter-barcode-table" panelStyle="width:250px"
+									disabled="#{tableBeanItem.filteredBarcode_item.isEmpty()}">
+									<f:selectItem itemLabel="Nessuno" itemValue="" />
+									<f:selectItems value="#{tableBeanItem.filteredBarcode_item}"
+										var="barcode"
+										itemLabel="#{barcode.barcode} - #{barcode.description}"
+										itemValue="#{barcode}" />
+									<p:column>
+										<p:graphicImage value="../../images/#{b.used}.png"
+											styleClass="used-img" />
+									</p:column>
+
+									<p:column>#{b.barcode} - #{b.description}</p:column>
+									<p:ajax event="change" />
+								</p:selectOneMenu>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="DESCRIZIONE" sortBy="#{item.description}"
+						filterBy="#{item.description}" filterMatchMode="contains"
+						id="description" width="150">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{item.description}" />
+							</f:facet>
+							<f:facet name="input">
+								<h:inputText value="#{item.description}" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="BRAND" sortBy="#{item.brand}" id="brand"
+						width="80">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{item.brand}" />
+							</f:facet>
+							<f:facet name="input">
+								<h:inputText value="#{item.brand}" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="QUANTITA" sortBy="#{item.quantity}"
+						id="quantity" width="80">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{item.quantity}" />
+							</f:facet>
+							<f:facet name="input">
+								<pe:inputNumber value="#{item.quantity}"
+									disabled="#{item.kind.net_reachable}" decimalPlaces="0"
+									styleClass="quantity-field" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="TIPOLOGIA" id="kind" width="220"
+						filterMatchMode="contains" sortBy="#{item.kind.name}"
+						filterBy="#{item.kind.name}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{item.kind.name}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:selectOneMenu value="#{item.kind}" filter="true"
+									filterMatchMode="contains" converter="kindconverter">
+									<f:selectItems value="#{tableBeanItem.avaliableKind}"
+										var="kind" itemLabel="#{kind.name}" itemValue="#{kind}" />
+									<f:ajax event="change" listener="#{tableBeanItem.onChangeKind}"
+										render="filter-barcode-table" />
+								</p:selectOneMenu>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<f:facet name="footer">
+						<div class="footer-table">
+							<div class="footer-button">
+								<p:commandButton id="effectsDialogButton"
+									value="+ Aggiungi Item" onclick="modalInsertItem.show();"
+									type="button" />
+							</div>
+						</div>
+					</f:facet>
+
+				</p:dataTable>
+			</h:form>
+		</p:layoutUnit>
+
+	</p:layout>
+
+</h:body>
+</html>

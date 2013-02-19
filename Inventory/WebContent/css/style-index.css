@@ -1,0 +1,104 @@
+#wrapperLogin {
+	position: absolute;
+	margin: auto auto;
+	top: 30%;
+	width: 270px;
+	height: 160px;
+	left: 40%;
+	z-index:2;
+}
+
+
+img {
+width:100%;
+}
+
+#top {
+	position: absolute;
+	top: 0px;
+	width: 100%;
+}
+
+#bottom {
+	position: absolute;
+	bottom: 0px;
+	width: 100%;
+}
+
+body {
+	margin: 0px !important;
+	overflow: hidden;
+}
+
+
+/* CSS Overwrite */
+span.ui-messages-error-summary,span.ui-messages-error-detail {
+	font-size: 12px !important;
+}
+
+.ui-button-text-only .ui-button-text {
+	padding: 0px !important;
+}
+
+.ui-dialog .ui-dialog-content {
+	overflow: hidden !important;
+}
+
+.ui-dialog .ui-dialog-title {
+	display: none !important;
+}
+
+#buttonOk {
+	float: right;
+	margin-top: -15px;
+	margin-right: -5px;
+}
+
+.buttonOK {
+	border: 3px solid white !important;
+	border-radius: 200px;
+	height: 56px;
+	width: 56px;
+	box-shadow: 0px 0 5px 5px #60b0e3;
+}
+
+.buttonOK:hover {
+	box-shadow: 0px 0 5px 5px orange;
+}
+
+#generalPanel {
+	border-radius: 15px;
+	border: 3px solid white;
+	box-shadow: 0px 0 3px 3px orange;
+	background: rgba(104, 181, 227, 0.8) !important;
+	
+	
+}
+
+#moveFlash {
+	margin-top: -10px;
+	margin-left: -10px;
+}
+
+#panelBrowserSup {
+	margin-bottom: 15px;
+}
+
+#labelBrowserSup {
+	font-weight: normal !important;
+	font-size: 10px;
+	margin-bottom: 4px;
+	margin-right: 5px;
+}
+
+.abs {
+	position: absolute;
+}
+
+.ui-state-default{
+	background:#1484E6 !important;
+}
+
+.ui-state-hover{
+	background:#1484E6 !important;
+}

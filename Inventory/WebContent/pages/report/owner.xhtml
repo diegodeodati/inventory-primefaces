@@ -1,0 +1,151 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<link rel="stylesheet" type="text/css" href="../../css/style.css"
+		media="screen" />
+	<meta http-equiv="refresh"
+		content="#{session.maxInactiveInterval};url=owner.xhtml?faces-redirect=true" />
+</h:head>
+<h:body style="margin:0px;">
+	<div class="space"></div>
+	<h:form id="form-dialog">
+
+#{reportBean.setManageInventory('')}
+#{reportBean.setManageInternalUse('border: 1px solid blue;')}
+#{reportBean.setManageMaps('')}
+#{reportBean.setManageUtility('')}
+
+		<p:dialog id="modalDialog" visible="false" widgetVar="dialogModal"
+			modal="true" closable="false" draggable="false" resizable="false">
+			<p:ajaxStatus onstart="dialogModal.show()"
+				oncomplete="dialogModal.hide()" />
+			<p:graphicImage value="../../images/loading.gif" />
+		</p:dialog>
+
+		<p:dialog header="Inserisci Utente" id="modalInsertOwner"
+			visible="false" widgetVar="modalInsertOwner" modal="true"
+			closable="true" draggable="false" resizable="false">
+			<p:panelGrid columns="2">
+				<h:outputText value="Nome:" />
+				<h:inputText id="nome" value="#{ownerBean.name}" />
+				<h:outputText value="Cognome:" />
+				<h:inputText id="cognome" value="#{ownerBean.surname}" />
+				<h:outputText value="Email:" />
+				<h:inputText id="email" value="#{ownerBean.email}" />
+				<f:facet name="footer">
+					<center>
+						<p:commandButton value="Salva"
+							actionListener="#{tableBeanOwner.onCreate}" type="submit"
+							update="@form,:form-table:ownerReportTable"
+							oncomplete="ownerReportTable.filter()" />
+						<p:commandButton value="Annulla"
+							onclick="modalInsertOwner.hide();" type="button"
+							update="modalInsertOwner" />
+					</center>
+				</f:facet>
+			</p:panelGrid>
+		</p:dialog>
+
+		<p:confirmDialog id="confirmDialog" message="Sei sicuro ?"
+			header="Cancellazione Utente" severity="alert"
+			widgetVar="confirmation">
+
+			<p:commandButton id="confirm" value="Si"
+				update=":form-table:ownerReportTable"
+				oncomplete="ownerReportTable.filter(),confirmation.hide()"
+				actionListener="#{tableBeanOwner.onRemove}" />
+			<p:commandButton id="decline" value="No"
+				onclick="confirmation.hide()" type="button" />
+
+		</p:confirmDialog>
+	</h:form>
+	<ui:include src="../common/menu.xhtml" />
+	<p:layout fullPage="true">
+		<p:ajax event="resize" update=":form-table:ownerReportTable" />
+		<p:layoutUnit position="north" styleClass="layoutUnit-north">
+
+		</p:layoutUnit>
+		<p:layoutUnit position="center" styleClass="layoutUnit-center">
+
+			<h:form id="form-table">
+				<p:growl id="messages" showDetail="true" life="2000" />
+
+				<p:dataTable var="owner" value="#{tableBeanOwner.tableList}"
+					widgetVar="ownerReportTable" id="ownerReportTable" editable="true"
+					additionalScrollHeight="300" resizableColumns="true"
+					scrollable="true" scrollHeight="0">
+
+					<p:ajax event="rowEdit" update="@this,:form-table:messages"
+						listener="#{tableBeanOwner.onEdit}" immediate="true" />
+
+
+					<p:column headerText="Options" width="180">
+						<p:rowEditor />
+						<p:commandButton id="submit_erase"
+							actionListener="#{tableBeanOwner.onSetOwner}"
+							icon="ui-icon-trash" styleClass="custom-trash"
+							oncomplete="confirmation.show()">
+							<f:attribute name="parameter" value="#{owner}" />
+						</p:commandButton>
+					</p:column>
+
+					<p:column headerText="NOME" sortBy="#{owner.name}"
+						filterBy="#{owner.name}" id="username" width="200">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{owner.name}" />
+							</f:facet>
+							<f:facet name="input">
+								<h:inputText value="#{owner.name}" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+
+					<p:column headerText="COGNOME" sortBy="#{owner.surname}"
+						filterBy="#{owner.surname}" id="nome" width="200">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{owner.surname}" />
+							</f:facet>
+							<f:facet name="input">
+								<h:inputText value="#{owner.surname}" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="EMAIL" id="email" width="200">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{owner.email}" />
+							</f:facet>
+							<f:facet name="input">
+								<h:inputText value="#{owner.email}" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+
+
+					<f:facet name="footer">
+						<div class="footer-table">
+							<div class="footer-button">
+								<p:commandButton id="effectsDialogButton"
+									value="+ Aggiungi Utente" onclick="modalInsertOwner.show();"
+									type="button" />
+							</div>
+						</div>
+					</f:facet>
+
+				</p:dataTable>
+			</h:form>
+		</p:layoutUnit>
+
+	</p:layout>
+
+</h:body>
+</html>

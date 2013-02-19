@@ -1,0 +1,169 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<h:head>
+	<link rel="stylesheet" type="text/css" href="../../css/style.css"
+		media="screen" />
+	<meta http-equiv="refresh"
+		content="#{session.maxInactiveInterval};url=barcode.xhtml?faces-redirect=true" />
+</h:head>
+<h:body style="margin:0px;">
+	<div class="space"></div>
+	<h:form id="form-dialog">
+
+#{reportBean.setManageInventory('')}
+#{reportBean.setManageInternalUse('')}
+#{reportBean.setManageMaps('')}
+#{reportBean.setManageIUtility('border: 1px solid blue;')}
+
+<p:dialog id="modalDialog" visible="false" widgetVar="dialogModal"
+			modal="true" closable="false" draggable="false" resizable="false">
+			<p:ajaxStatus onstart="dialogModal.show()"
+				oncomplete="dialogModal.hide()" />
+			<p:graphicImage value="../../images/loading.gif" />
+		</p:dialog>
+
+		<p:dialog header="Resoconto Stampa Barcode" id="modalReviewBarcode"
+			visible="false" widgetVar="modalReviewBarcode" closable="true"
+			draggable="true" resizable="false" onHide="refreshTable()" modal="true"
+			styleClass="reviewprint-dialog">
+			<p:dataTable var="barcodePrint"
+				value="#{tableBeanBarcode_item.tableReviewList}"
+				styleClass="reviewprint-table" id="barcode_printReviewTable" scrollable="true" scrollHeight="200"
+				resizableColumns="true" scrollRows="10" editable="true">
+
+				<p:column headerText="Options" width="80">
+					<div class="div-manage-barcode-button">
+						<p:rowEditor />
+						<p:commandButton id="submit_erase" icon="ui-icon-trash"
+							styleClass="custom-trash"
+							action="#{tableBeanBarcode_item.removeFromTableReviewList}"
+							update="barcode_printReviewTable" process="@this">
+							<f:setPropertyActionListener value="#{barcodePrint}"
+								target="#{tableBeanBarcode_item.barcodePrintGet}" />
+						</p:commandButton>
+					</div>
+				</p:column>
+
+				<p:column headerText="BARCODE"
+					sortBy="#{barcodePrint.barcode.barcode}"
+					filterBy="#{barcodePrint.barcode.barcode}" id="barcode" width="100">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{barcodePrint.barcode.barcode}" />
+						</f:facet>
+						<f:facet name="input">
+							<h:outputText value="#{barcodePrint.barcode.barcode}" />
+						</f:facet>
+
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="DESCRIZIONE"
+					sortBy="#{barcodePrint.barcode.description}"
+					filterBy="#{barcodePrint.barcode.description}" id="description"
+					width="100">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{barcodePrint.barcode.description}" />
+						</f:facet>
+						<f:facet name="input">
+							<h:outputText value="#{barcodePrint.barcode.description}" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="QUANTITA" sortBy="#{barcodePrint.quantity}"
+					id="quantity" width="50">
+
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{barcodePrint.quantity}" />
+						</f:facet>
+						<f:facet name="input">
+							<pe:inputNumber value="#{barcodePrint.quantity}"
+								decimalPlaces="0" styleClass="quantity-field" maxValue="99"
+								minValue="0" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+
+				<f:facet name="footer">
+					<div class="footer-table">
+						<div class="footer-button">
+							<p:commandButton id="downloadLink" value="Download" ajax="false"
+								onclick="PrimeFaces.monitorDownload(start, stop)" icon="ui-icon-arrowthichk-s" >
+								<p:fileDownload value="#{tableBeanBarcode_item.file}" />
+							</p:commandButton>
+						</div>
+					</div>
+				</f:facet>
+
+			</p:dataTable>
+		</p:dialog>
+	</h:form>
+	<ui:include src="../common/menu.xhtml" />
+	<p:layout fullPage="true">
+		<p:ajax event="resize" update=":form-list:barcode_generateList" />
+		<p:layoutUnit position="north" styleClass="layoutUnit-north">
+
+		</p:layoutUnit>
+		<p:layoutUnit position="center" styleClass="layoutUnit-center">
+			<h:form id="form-list">
+			<p:growl id="messages" showDetail="true" life="2000" />
+				<p:dataGrid var="barcode" value="#{tableBeanBarcode_item.tableList}"
+					columns="9" rows="72" paginator="true" id="barcode_generateList"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+					paginatorPosition="top" styleClass="barcode-datagrid" emptyMessage="Nessun Barcode Trovato">
+					<f:facet name="header">
+							<h:outputText value="Filter:" styleClass="custom-title"/>
+							<p:selectOneMenu value="#{tableBeanBarcode_item.filterGeneralKind}" filter="true"
+									filterMatchMode="contains" converter="generalkindconverter" styleClass="custom-combobox">
+									<f:selectItem itemLabel="Nessuno" itemValue="" />
+									<f:selectItems value="#{tableBeanBarcode_item.optionGeneralKind}"
+										var="generalkind" itemLabel="#{generalkind.cod}" itemValue="#{generalkind}" />
+										<p:ajax event="change" listener="#{tableBeanBarcode_item.changeFilterGeneralKind}" update="barcode_generateList"/>
+								</p:selectOneMenu>
+					</f:facet>
+					
+					
+					<p:panel widgetVar="barcode-panel" styleClass="barcode-panel">
+					
+					
+					
+						<p:remoteCommand id="refreshTable" name="refreshTable"
+							update="barcode_generateList"  
+							actionListener="#{tableBeanBarcode_item.cleanTableReviewList}" />
+						<p:remoteCommand id="refreshReviewList" name="refreshReviewList"
+							actionListener="#{tableBeanBarcode_item.addToTableReviewList}"
+							update=":form-dialog:barcode_printReviewTable" />
+						<p:commandButton value="fake" oncomplete="refreshReviewList()"
+							styleClass="barcode-button">
+							<f:setPropertyActionListener value="#{barcode}"
+								target="#{tableBeanBarcode_item.barcodeGet}" />
+						</p:commandButton>
+						<p:graphicImage
+							value="../../images/barcodes/#{barcode.barcode}.png"
+							styleClass="barcode-img" />
+						<h:outputText value="#{barcode.description}" />
+						<p:effect type="clip" event="click" />
+
+					</p:panel>
+
+
+				</p:dataGrid>
+				<p:commandButton value="Resoconto Stampa" id="buttonReviewPrint"
+					oncomplete="modalReviewBarcode.show()" update=":form-dialog"
+					styleClass="reviewprint-button" />
+			</h:form>
+		</p:layoutUnit>
+
+	</p:layout>
+
+</h:body>
+</html>

@@ -1,0 +1,103 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<h:head>
+	<link rel="stylesheet" type="text/css" href="../../css/style.css"
+		media="screen" />
+	<meta http-equiv="refresh"
+		content="#{session.maxInactiveInterval};url=barcode.xhtml?faces-redirect=true" />
+</h:head>
+<h:body style="margin:0px;">
+	<div class="space"></div>
+	<h:form id="form-dialog">
+
+#{reportBean.setManageInventory('')}
+#{reportBean.setManageInternalUse('border: 1px solid blue;')}
+#{reportBean.setManageMaps('')}
+#{reportBean.setManageUtility('')}
+
+
+		<p:dialog id="modalDialog" visible="false" widgetVar="dialogModal"
+			modal="true" closable="false" draggable="false" resizable="false">
+			<p:ajaxStatus onstart="dialogModal.show()"
+				oncomplete="dialogModal.hide()" />
+			<p:graphicImage value="../../images/loading.gif" />
+		</p:dialog>
+
+		<p:dialog header="Inserisci Barcode" id="modalInsertBarcode"
+			visible="false" widgetVar="modalInsertBarcode" modal="true"
+			closable="true" draggable="false" resizable="false">
+			<p:panelGrid columns="2">
+				<h:outputText value="Quantita'"/>
+				<pe:inputNumber value="#{barcode_itemBean.quantity}"
+								decimalPlaces="0" styleClass="quantity-field" maxValue="99"
+								minValue="0" />
+				<h:outputText value="Tipo:" />
+				<p:selectOneMenu value="#{barcode_itemBean.gKind}" filter="true"
+									filterMatchMode="contains" converter="generalkindconverter" styleClass="custom-combobox">
+									<f:selectItem itemLabel="Nessuno" itemValue="" />
+									<f:selectItems value="#{tableBeanBarcode_item.optionGeneralKind}"
+										var="generalkind" itemLabel="#{generalkind.cod}" itemValue="#{generalkind}" />
+								</p:selectOneMenu>
+				<f:facet name="footer">
+					<center>
+						<p:commandButton value="Salva"
+							actionListener="#{tableBeanBarcode_item.onCreate}" type="submit" oncomplete="modalInsertBarcode.hide();"
+							update=":form-table" async="false" ajax="true" />
+						<p:commandButton value="Annulla"
+							onclick="modalInsertBarcode.hide();" type="button"
+							update="modalInsertBarcode" />
+					</center>
+				</f:facet>
+			</p:panelGrid>
+		</p:dialog>
+	</h:form>
+	<ui:include src="../common/menu.xhtml" />
+	<p:layout fullPage="true">
+		<p:ajax event="resize" update=":form-table:barcode_itemReportTable" />
+		<p:layoutUnit position="north" styleClass="layoutUnit-north">
+
+		</p:layoutUnit>
+		<p:layoutUnit position="center" styleClass="layoutUnit-center">
+
+			<h:form id="form-table">
+				<p:growl id="messages" showDetail="true" life="2000" />
+
+				<p:dataTable var="barcode"
+					value="#{tableBeanBarcode_item.tableList}"
+					id="barcode_itemReportTable" additionalScrollHeight="300"
+					resizableColumns="true" scrollable="true" scrollHeight="0">
+
+					<p:column headerText="BARCODE" sortBy="#{barcode.barcode}"
+						filterBy="#{barcode.barcode}"  filterMatchMode="contains" id="barcode" width="200">
+							<h:outputText value="#{barcode.barcode}" />
+					</p:column>
+
+					<p:column headerText="DESCRIZIONE" sortBy="#{barcode.description}"
+						filterBy="#{barcode.description}" filterMatchMode="contains" id="description" width="200">
+							<h:outputText value="#{barcode.description}" />
+					</p:column>
+
+
+					<f:facet name="footer">
+						<div class="footer-table">
+							<div class="footer-button">
+								<p:commandButton id="effectsDialogButton"
+									value="+ Aggiungi Barcode" onclick="modalInsertBarcode.show();"
+									type="button" />
+							</div>
+						</div>
+					</f:facet>
+
+				</p:dataTable>
+			</h:form>
+		</p:layoutUnit>
+
+	</p:layout>
+
+</h:body>
+</html>
