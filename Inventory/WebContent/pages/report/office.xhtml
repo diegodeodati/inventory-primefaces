@@ -1,0 +1,151 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<h:head>
+	<link rel="stylesheet" type="text/css" href="../../css/style.css"
+		media="screen" />
+	<meta http-equiv="refresh"
+		content="#{session.maxInactiveInterval};url=office.xhtml?faces-redirect=true" />
+</h:head>
+<h:body style="margin:0px;">
+	<div class="space"></div>
+	<h:form id="form-dialog">
+
+#{reportBean.setManageInventory('')}
+#{reportBean.setManageInternalUse('border: 1px solid blue;')}
+#{reportBean.setManageMaps('')}
+#{reportBean.setManageUtility('')}
+
+		<p:dialog id="modalDialog" visible="false" widgetVar="dialogModal"
+			modal="true" closable="false" draggable="false" resizable="false">
+			<p:ajaxStatus onstart="dialogModal.show()"
+				oncomplete="dialogModal.hide()" />
+			<p:graphicImage value="../../images/loading.gif" />
+		</p:dialog>
+
+		<p:dialog header="Inserisci Ufficio" id="modalInsertOffice"
+			visible="false" widgetVar="modalInsertOffice" modal="true"
+			closable="true" draggable="false" resizable="false">
+			<p:panelGrid columns="2">
+				<h:outputText value="Nome:" />
+				<h:inputText id="nome" value="#{officeBean.name}" />
+				<h:outputText value="Mappa:" />
+				<p:selectOneMenu value="#{officeBean.id_map}" filter="true"
+					filterMatchMode="contains">
+					<f:selectItem itemLabel="Seleziona" itemValue="" />
+					<f:selectItems value="#{tableBeanOffice.avaliableMap}" var="map"
+						itemLabel="#{map.nameMap}" itemValue="#{map.id}" />
+				</p:selectOneMenu>
+				<h:outputText value="Posizione:" />
+				<pe:inputNumber value="#{office.pos}" decimalPlaces="0" />
+				<f:facet name="footer">
+					<center>
+						<p:commandButton value="Salva"
+							actionListener="#{tableBeanOffice.onCreate}" type="submit"
+							update="@form" />
+						<p:commandButton value="Annulla"
+							onclick="modalInsertOffice.hide();" type="button"
+							update="modalInsertOffice" />
+					</center>
+				</f:facet>
+			</p:panelGrid>
+		</p:dialog>
+	</h:form>
+	<ui:include src="../common/menu.xhtml" />
+	<p:layout fullPage="true">
+		<p:ajax event="resize" update=":form-table:officeReportTable" />
+		<p:layoutUnit position="north" styleClass="layoutUnit-north">
+
+		</p:layoutUnit>
+		<p:layoutUnit position="center" styleClass="layoutUnit-center">
+
+			<h:form id="form-table">
+				<p:growl id="messages" showDetail="true" life="2000" />
+
+				<p:dataTable var="office" value="#{tableBeanOffice.tableList}"
+					id="officeReportTable" editable="true" additionalScrollHeight="300"
+					resizableColumns="true" scrollable="true" scrollHeight="0">
+
+					<p:ajax event="rowEdit" update="@this,:form-table:messages"
+						listener="#{tableBeanOffice.onEdit}" immediate="true" />
+
+					<p:column headerText="Options" width="50">
+						<div class="div-tool-button">
+							<p:rowEditor />
+							<p:commandButton id="submit_erase"
+								onclick="return confirm('Vuoi cancellare davvero questo ufficio?')"
+								action="#{tableBeanOffice.onRemove}" icon="ui-icon-trash"
+								styleClass="custom-trash" update="@form" ajax="false">
+								<f:setPropertyActionListener value="#{office}"
+									target="#{tableBeanOffice.officeGet}" />
+							</p:commandButton>
+						</div>
+					</p:column>
+
+					<p:column headerText="NOME" sortBy="#{office.name}"
+						filterBy="#{office.name}" id="nome" width="300">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{office.name}" />
+							</f:facet>
+							<f:facet name="input">
+								<h:inputText value="#{office.name}" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+
+					<p:column headerText="MAPPA" sortBy="#{office.id_map}"
+						filterBy="#{office.id_map}" id="map" width="100">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{office.id_map}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:selectOneMenu value="#{office.id_map}" filter="true"
+									filterMatchMode="contains">
+									<f:selectItem itemLabel="Seleziona" itemValue="0" />
+									<f:selectItems value="#{tableBeanOffice.avaliableMap}"
+										var="map" itemLabel="#{map.nameMap}"
+										itemValue="#{map.id}" />
+								</p:selectOneMenu>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="POSIZIONE" sortBy="#{office.pos}"
+						filterBy="#{office.pos}" id="position" width="120">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{office.pos}" />
+							</f:facet>
+							<f:facet name="input">
+								<pe:inputNumber value="#{office.pos}" decimalPlaces="0"
+									style="width:100px;" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+
+					<f:facet name="footer">
+						<div class="footer-table">
+							<div class="footer-button">
+								<p:commandButton id="effectsDialogButton"
+									value="+ Aggiungi Ufficio" onclick="modalInsertOffice.show();"
+									type="button" />
+							</div>
+						</div>
+					</f:facet>
+
+				</p:dataTable>
+			</h:form>
+		</p:layoutUnit>
+
+	</p:layout>
+
+</h:body>
+</html>

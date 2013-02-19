@@ -1,0 +1,263 @@
+.menu-div {
+	display: block;
+	border: 0px !important;
+	padding: 0px;
+	margin: 0px;
+	position: absolute;
+	top: 5px;
+	width: 100%;
+	height: 200px;
+	overflow-y: hidden;
+	background-color: transparent !important;
+}
+
+.quit-div {
+	position: absolute;
+	top: -42px;
+	right: 2%;
+	z-index: 20;
+}
+
+.barcode-panel {
+	margin-left: 20px;
+	width: 120px;
+}
+
+.barcode-button {
+	position: absolute;
+	height: 67px;
+	width: 126px;
+	opacity: 0;
+	margin-left: -15px;
+	margin-top: -10px;
+}
+
+.barcode-datagrid {
+	height: 80%;
+}
+
+.quantity-field input {
+	width: 30px;
+}
+
+.quit-button {
+	background: transparent !important;
+}
+
+.logo-media {
+	position: absolute;
+	top: 18px;
+	left: 2%;
+	width: 17%;
+	height: 90px;
+	z-index: 2;
+}
+
+.layoutUnit-north {
+	height: 50 !important;
+	overflow-y: hidden;
+	background-color: transparent !important;
+	border: 0px !important;
+}
+
+.layoutUnit-center {
+	top: 60px !important;
+	width: 96% !important;
+	height: 90% !important;
+	margin-left: 2% !important;
+	margin-right: 2% !important;
+}
+
+.layoutUnit-south {
+	position: absolute;
+	top: -6px;
+}
+
+.ui-selectonemenu-items-wrapper {
+	height: auto !important;
+}
+
+.ui-selectonemenu {
+	width: 100%;
+}
+
+.ui-icon-pencil,.ui-icon-check,.ui-icon-close {
+	top: 0px;
+	position: relative;
+	float: left !important;
+}
+
+.no-border {
+	border: 0px !important;
+}
+
+.no-background {
+	background: none !important;
+	border-spacing: 0px !important;
+	display: block !important;
+}
+
+.div-tool-button {
+	height: 26px;
+	width: 200px;
+}
+
+.div-manage-barcode-button {
+	height: 26px;
+}
+
+.ui-state-default .ui-icon {
+	background-image:
+		url("/Inventory/javax.faces.resource/images/ui-icons_0a82eb_256x240.png.xhtml?ln=primefaces-excite-bike")
+		!important;
+}
+
+table {
+	font-size: 12px;
+	line-height: 12px !important;
+}
+
+.ui-selectonemenu-panel {
+	font-size: 12px !important;
+	width: 175px;
+}
+
+.ui-selectonemenu-panel .ui-selectonemenu-items-wrapper {
+	overflow-y: scroll !important;
+	height: 300px !important;
+}
+
+.ui-menubar {
+	font-size: 14px !important;
+}
+
+.ui-layout-unit .ui-layout-unit-content {
+	overflow: hidden !important;
+}
+
+.ui-datatable-scrollable-body {
+	overflow-y: scroll !important;
+}
+
+.ui-datatable-scrollable .ui-datatable-scrollable-header-box {
+	padding-right: 17px !important;
+}
+
+.barcode-img {
+	vertical-align: middle;
+	margin-right: 10px;
+}
+
+.logout {
+	position: absolute;
+	right: 0px;
+}
+
+* {
+	margin: 0;
+}
+
+.ui-datatable-odd {
+	background: #BCDCF5 !important;
+}
+
+tr {
+	height: 18px !important;
+}
+
+.scribblar {
+	width: 630px;
+	height: 460px;
+}
+
+.sub-menu ul {
+	top: 25px !important;
+	z-index: 2;
+}
+
+.sub-menu ul ul {
+	top: 0px !important;
+	z-index: 2;
+}
+
+.menu-bar {
+	z-index: 2;
+}
+
+.reviewprint-button {
+	z-index: 2;
+	bottom: -100px;
+	float: right;
+	font-size: 12 !important;
+}
+
+.reviewprint-table {
+	width: 465px;
+}
+
+.reviewprint-dialog {
+	width: 500px !important;
+	overflow: hidden;
+}
+
+.ui-paginator {
+	font-size: 12px !important;
+}
+
+.custom-combobox {
+	font-size: 12px !important;
+}
+
+.custom-combobox label {
+	text-align: left;
+}
+
+.custom-item-combobox {
+	width: 500px !important;
+}
+
+.custom-title {
+	font-size: 12px !important;
+	bottom: 9px;
+	position: relative;
+	margin: 5px;
+}
+
+.custom-trash {
+	float: left;
+	background: none !important;
+	border: 0px !important;
+	top: -6px;
+	left: -5px;
+	margin: 0px !important;
+}
+
+.ui-datatable .ui-row-toggler {
+	cursor: pointer;
+	position: relative;
+	top: 1px;
+	left: -17px;
+	float: left;
+}
+
+.custom-shuffle {
+	float: left;
+	background: none !important;
+	border: 0px !important;
+	top: -5px;
+	left: -17px;
+	position: relative;
+}
+
+.custom-contact {
+	float: left;
+	background: none !important;
+	border: 0px !important;
+	top: -5px;
+	left: -17px;
+}
+
+.custom-barcode-filter div select{
+	color: black !important;
+	font-weight: lighter !important;
+}

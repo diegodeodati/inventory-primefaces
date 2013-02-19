@@ -1,0 +1,11 @@
+<Context path="/birsprime" reloadable="true" antiResourceLocking="true"> 
+
+	<Resource name="jdbc/mysql_inventory" auth="Container" type="javax.sql.DataSource"
+		maxActive="4" maxIdle="2" maxWait="-1" username="sviluppo" password="sviluppo"
+		validationQuery="Select 1" validationQueryTimeout="10000"
+		removeAbandoned="true" removeAbandonedTimeout="5000" 
+		maxStatementsPerConnection="20" maxwait="-1"
+		driverClassName="com.mysql.jdbc.Driver"
+		url="jdbc:mysql://10.0.12.35:3306/inventory?zeroDateTimeBehavior=convertToNull" />
+
+</Context>

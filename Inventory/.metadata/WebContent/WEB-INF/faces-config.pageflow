@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf13600748239540" configfile="/Inventory/WebContent/WEB-INF/faces-config.xml">
+  <nodes xsi:type="pageflow:PFPage" name="*" x="122" y="1522" id="pf13600748578641" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf13600748578642 pf13600748578643 pf13600748578644 pf13600748578645 pf13600748578646 pf13600748578647 pf13600748578648 pf13600748578649 pf136007485786410 pf136007485786411 pf136007485786412 pf13601502550780" path="*"/>
+  <nodes xsi:type="pageflow:PFPage" name="index.xhtml" x="338" y="178" id="pf136007485786413" referenceLink="//@navigationRule.0/@navigationCase.0/@toViewId|" inlinks="pf13600748578642" path="/index.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/report/upload-img-game.xhtml" x="338" y="562" id="pf136007485786414" referenceLink="//@navigationRule.0/@navigationCase.1/@toViewId|" inlinks="pf13600748578643" path="/pages/report/upload-img-game.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/report/user.xhtml" x="338" y="946" id="pf136007485786415" referenceLink="//@navigationRule.0/@navigationCase.2/@toViewId|" inlinks="pf13600748578644" path="/pages/report/user.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/report/inventory.xhtml" x="338" y="1330" id="pf136007485786416" referenceLink="//@navigationRule.0/@navigationCase.3/@toViewId|" inlinks="pf13600748578645" path="/pages/report/inventory.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/report/owner.xhtml" x="338" y="1714" id="pf136007485786417" referenceLink="//@navigationRule.0/@navigationCase.4/@toViewId|" inlinks="pf13600748578646" path="/pages/report/owner.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/report/barcode.xhtml" x="338" y="2098" id="pf136007485786518" referenceLink="//@navigationRule.0/@navigationCase.5/@toViewId|" inlinks="pf13600748578647" path="/pages/report/barcode.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/report/office.xhtml" x="338" y="2482" id="pf136007485786519" referenceLink="//@navigationRule.0/@navigationCase.6/@toViewId|" inlinks="pf13600748578648" path="/pages/report/office.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/map/map21.xhtml" x="338" y="2866" id="pf136007485786520" referenceLink="//@navigationRule.0/@navigationCase.7/@toViewId|" inlinks="pf13600748578649" path="/pages/map/map21.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/map/map11.xhtml" id="pf136007485786521" referenceLink="//@navigationRule.0/@navigationCase.8/@toViewId|" inlinks="pf136007485786410" path="/pages/map/map11.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/map/map12.xhtml" id="pf136007485786522" referenceLink="//@navigationRule.0/@navigationCase.9/@toViewId|" inlinks="pf136007485786411" path="/pages/map/map12.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/map/map01.xhtml" id="pf136007485786523" referenceLink="//@navigationRule.0/@navigationCase.10/@toViewId|" inlinks="pf136007485786412" path="/pages/map/map01.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/util/barcode.xhtml" id="pf13601502550791" referenceLink="//@navigationRule.0/@navigationCase.11/@toViewId|" inlinks="pf13601502550780" path="/pages/util/barcode.xhtml"/>
+  <links id="pf13600748578642" target="pf136007485786413" source="pf13600748578641" outcome="index" redirect="true"/>
+  <links id="pf13600748578643" target="pf136007485786414" source="pf13600748578641" outcome="upload-img-game" redirect="true"/>
+  <links id="pf13600748578644" target="pf136007485786415" source="pf13600748578641" outcome="user" redirect="true"/>
+  <links id="pf13600748578645" target="pf136007485786416" source="pf13600748578641" outcome="inventory" redirect="true"/>
+  <links id="pf13600748578646" target="pf136007485786417" source="pf13600748578641" outcome="owner" redirect="true"/>
+  <links id="pf13600748578647" target="pf136007485786518" source="pf13600748578641" outcome="barcode" redirect="true"/>
+  <links id="pf13600748578648" target="pf136007485786519" source="pf13600748578641" outcome="office" redirect="true"/>
+  <links id="pf13600748578649" target="pf136007485786520" source="pf13600748578641" outcome="map21" redirect="true"/>
+  <links id="pf136007485786410" target="pf136007485786521" source="pf13600748578641" outcome="map11" redirect="true"/>
+  <links id="pf136007485786411" target="pf136007485786522" source="pf13600748578641" outcome="map12" redirect="true"/>
+  <links id="pf136007485786412" target="pf136007485786523" source="pf13600748578641" outcome="map01" redirect="true"/>
+  <links id="pf13601502550780" target="pf13601502550791" source="pf13600748578641" outcome="generator-barcode" redirect="true"/>
+</pageflow:Pageflow>

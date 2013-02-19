@@ -1,0 +1,49 @@
+
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+	<h:form prependId="false">
+
+		<div class="menu-div">
+			<p:menubar autoDisplay="false" styleClass="menu-bar">
+
+				<p:menuitem value="Inventario" icon="ui-icon-contact"
+					action="#{reportBean.filterInventory}"
+					style="#{reportBean.manageInventory}" />
+				<p:submenu label="Gestione Interna" icon="star"
+					styleClass="sub-menu" style="#{reportBean.manageInternalUse}">
+					<p:menuitem value="Uffici" icon="ui-icon-contact"
+						action="#{reportBean.filterOffice}" />
+					<p:menuitem value="Barcode" icon="ui-icon-contact"
+						action="#{reportBean.filterBarcode}" />
+					<p:menuitem value="Possessori" icon="ui-icon-contact"
+						action="#{reportBean.filterOwner}" />
+					<p:menuitem value="Utenti" icon="ui-icon-contact"
+						action="#{reportBean.filterUser}"
+						rendered="#{loginBean.loggedUser.admin}" />
+				</p:submenu>
+				<p:submenu label="Mappe" icon="star" styleClass="sub-menu"
+					style="#{reportBean.manageMaps}">
+					<p:menuitem value="Piano 0-A" icon="ui-icon-contact"
+						action="#{reportBean.filterMap01}" />
+					<p:menuitem value="Piano 1-A" icon="ui-icon-contact"
+						action="#{reportBean.filterMap11}" />
+					<p:menuitem value="Piano 1-B" icon="ui-icon-contact"
+						action="#{reportBean.filterMap21}" />
+					<p:menuitem value="Piano 2-A" icon="ui-icon-contact"
+						action="#{reportBean.filterMap12}" />
+				</p:submenu>
+				<p:menuitem value="Generatore Barcode" icon="ui-icon-contact"
+					action="#{reportBean.generatorBarcode}"
+					style="#{reportBean.manageUtility}" />
+				<p:menuitem value="Logout" icon="ui-icon-quit" styleClass="logout"
+					action="#{loginBean.logout}" />
+			</p:menubar>
+		</div>
+	</h:form>
+</ui:composition>
